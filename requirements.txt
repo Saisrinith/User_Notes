@@ -1,3 +1,9 @@
 fastapi
 uvicorn
 sqlalchemy
+pytest
+httpx
+passlib[bcrypt]
+python-jose
+types-passlib
+types-python-jose

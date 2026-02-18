@@ -1,25 +1,28 @@
-from fastapi import FastAPI, Depends
-from sqlalchemy.orm import Session
-from database import engine, Base, get_db
-from models import Note
+from fastapi import FastAPI
+from database import engine, Base
+from routers import notes, auth
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(title="Notes API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all for now
+    allow_credentials=True,
+    allow_methods=["*"],  # GET, POST, OPTIONS, etc
+    allow_headers=["*"],  # Authorization, Content-Type
+)
+
+
+app.include_router(notes.router)
+app.include_router(auth.router)
+app.include_router(notes.router)
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 def home():
-    return{"status" : "Notes API running"}
-
-@app.post("/notes")
-def create_note(content: str, db: Session = Depends(get_db)):
-    note = Note(content=content)
-    db.add(note)
-    db.commit()
-    db.refresh(note)
-    return note
-
-@app.get("/notes")
-def get_notes(db: Session = Depends(get_db)):
-    notes = db.query(Note).all()
-    return notes
+    return {"status": "API running"}
