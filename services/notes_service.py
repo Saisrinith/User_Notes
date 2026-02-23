@@ -10,3 +10,17 @@ def create_note(db: Session, content: str):
 
 def get_all_notes(db: Session):
     return db.query(Note).all()
+
+def delete_note(db: Session, note_id: int):
+    note = db.query(Note).filter(Note.id == note_id).first()
+    if note:
+        db.delete(note)
+        db.commit()
+        return True
+    return False
+
+def delete_all_notes(db: Session):
+    count = db.query(Note).count()
+    db.query(Note).delete()
+    db.commit()
+    return count

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from database import get_db
 from schemas import NoteCreate, NoteResponse
-from services.notes_service import create_note, get_all_notes
+from services.notes_service import create_note, get_all_notes, delete_note, delete_all_notes
 
 router = APIRouter(prefix="/notes", tags=["Notes"])
 
@@ -29,3 +29,20 @@ def read_notes(db: Session = Depends(get_db)):
         )
 
     return notes
+
+
+@router.delete("/{note_id}", response_model=dict)
+def remove_note(note_id: int, db: Session = Depends(get_db)):
+    result = delete_note(db, note_id)
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Note not found"
+        )
+    return {"message": "Note deleted successfully", "id": note_id}
+
+
+@router.delete("/")
+def clear_all_notes(db: Session = Depends(get_db)):
+    count = delete_all_notes(db)
+    return {"message": f"Deleted {count} notes", "count": count}

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 from database import engine, Base
 from routers import notes, auth
 from fastapi.staticfiles import StaticFiles
@@ -24,5 +25,9 @@ app.include_router(notes.router)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
-def home():
+async def home():
+    return FileResponse("static/index.html")
+
+@app.get("/api/status")
+def api_status():
     return {"status": "API running"}

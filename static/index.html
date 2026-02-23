@@ -1,18 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>User Notes</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Notes</title>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>User Notes</h1>
+  <div class="container">
+    <header class="header">
+      <h1>📝 My Notes</h1>
+      <p class="subtitle">Keep all your thoughts and ideas organized</p>
+    </header>
 
-  <input id="noteInput" placeholder="Enter note" />
-  <button onclick="addNote()">Add Note</button>
+    <div class="input-section">
+      <input 
+        id="noteInput" 
+        type="text"
+        placeholder="✏️ Write your note here..." 
+        onkeypress="if(event.key==='Enter') addNote()"
+      />
+      <button class="btn btn-primary" onclick="addNote()">➕ Add Note</button>
+    </div>
 
-  <h2>All Notes</h2>
-  <ul id="notesList"></ul>
+    <div class="stats-section">
+      <div class="stat-item">
+        <span class="stat-label">Total Notes:</span>
+        <span class="stat-value" id="noteCount">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Selected:</span>
+        <span class="stat-value" id="selectedCount">0</span>
+      </div>
+    </div>
 
-  <script src="app.js"></script>
+    <div class="notes-section">
+      <div class="section-header">
+        <h2>📋 All Notes</h2>
+        <div class="button-group">
+          <button class="btn btn-danger btn-small" id="deleteBtn" onclick="deleteSelected()" style="display: none;">
+            🗑️ Delete Selected
+          </button>
+          <button class="btn btn-danger btn-small" id="clearBtn" onclick="clearAll()" style="display: none;">
+            🔥 Clear All
+          </button>
+        </div>
+      </div>
+
+      <div class="select-all-section" id="selectAllSection" style="display: none;">
+        <label class="checkbox-label">
+          <input type="checkbox" id="selectAllCheckbox" onchange="selectAll()">
+          <span>Select All</span>
+        </label>
+      </div>
+      
+      <div id="notesList" class="notes-list">
+        <div class="empty-state">✨ No notes yet. Add one to get started!</div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>Made with ❤️ | Notes App</p>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
 </body>
 </html>
